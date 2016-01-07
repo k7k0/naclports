@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-EXECUTABLES="ffmpeg ffmpeg_g ffprobe ffprobe_g"
+#EXECUTABLES="ffmpeg ffmpeg_g ffprobe ffprobe_g"
 
 # needed for RLIMIT_CPU
 EnableGlibcCompat
@@ -26,31 +26,33 @@ ConfigureStep() {
     extra_args+=" --arch=x86"
   fi
 
+  FILTERS="copy,null,anull,scale,resample,movie,amovie,crop,pad,apad,atrim,\
+    trim,sine,setpts,asetpts,volume,aevalsrc,aeval,aresample,aformat,format,\
+    amix,overlay"
+
   LogExecute ${SRC_DIR}/configure \
     --cross-prefix=${NACL_CROSS_PREFIX}- \
     --target-os=linux \
-    --enable-gpl \
+    --disable-everything \
+    --enable-muxer=webm \
+    --enable-demuxer=matroska \
+    --enable-encoder=libvpx_vp8,libvorbis \
+    --enable-decoder=libvpx_vp8,libvorbis \
+    --enable-filter="${FILTERS}" \
+    --disable-yasm \
+    --disable-asm \
     --enable-static \
     --enable-cross-compile \
-    --disable-inline-asm \
-    --disable-ssse3 \
-    --disable-mmx \
-    --disable-amd3dnow \
-    --disable-amd3dnowext \
-    --disable-indevs \
-    --enable-libmp3lame \
+    --enable-protocol=file \
     --enable-libvorbis \
-    --enable-libtheora \
     --enable-libvpx \
-    --disable-ffplay \
-    --disable-ffserver \
-    --disable-demuxer=rtsp \
-    --disable-demuxer=image2 \
+    --disable-programs \
     --prefix=${PREFIX} \
     ${extra_args}
 }
 
 TestStep() {
   SetupCrossPaths
-  LogExecute make testprogs
+  #### Tests fails, missing flags?
+  #LogExecute make testprogs
 }

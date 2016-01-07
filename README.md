@@ -80,36 +80,13 @@ On older Debian/Ubuntu systems these packages were known as:
 - lib32z1-dev
 - libssl1.0.0:i386
 
-How to Checkout
----------------
-
-Although the code is stored in git webports uses `gclient` to manage
-the checkout of dependencies. You will need to install `depot_tools` in
-order to gclient.
-
-Use the following steps to correctly checkout webports:
-
-1. Create a directory:
-
-```
-$ mkdir webports
-$ cd webports
-```
-
-2. Create a .gclient Configuration:
-
-```
-$ gclient config --name=src https://chromium.googlesource.com/webports.git
-```
-
-3. Sync to the dependencies:
-
-```
-$ gclient sync
-```
-
 Building
 --------
+
+Only the first time execute
+```
+build_tools/pip_install.sh
+```
 
 Before you can build any of the package you must set the `NACL_SDK_ROOT`
 environment variable to top directory of a version of the Native Client
